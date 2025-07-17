@@ -9,16 +9,24 @@ export default function useViewerLogic() {
 
   const [annotations, setAnnotations] = useState([]);
   const [pendingAnnotation, setPendingAnnotation] = useState(null);
+  const [selectedAnnotation, setSelectedAnnotation] = useState(null); // ekledim
   const [comment, setComment] = useState('');
   const [tag, setTag] = useState('');
 
-  // Yeni anotasyon oluşturulduğunda yakala
   useAnnotatorEvents(annotator, {
-    onCreate: setPendingAnnotation
+    onCreate: (anno) => {
+      setPendingAnnotation(anno);
+      setComment('');
+      setTag('');
+    },
+    onSelect: (anno) => { 
+      setSelectedAnnotation(anno);
+    }
   });
 
   const handleCancel = () => {
     setPendingAnnotation(null);
+    setSelectedAnnotation(null);  
     setComment('');
     setTag('');
   };
@@ -43,6 +51,7 @@ export default function useViewerLogic() {
     viewerRef,
     annotations,
     pendingAnnotation,
+    selectedAnnotation, // ekledim
     comment,
     tag,
     setComment,
@@ -51,3 +60,12 @@ export default function useViewerLogic() {
     handleCancel
   };
 }
+
+
+
+
+
+
+
+
+

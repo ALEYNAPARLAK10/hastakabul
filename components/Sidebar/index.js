@@ -70,4 +70,4 @@ export default function Sidebar({ minimal, annotations = [] }) {
       )}
     </aside>
   );
-}
+}  
