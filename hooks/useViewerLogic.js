@@ -1,3 +1,5 @@
+'use client';
+
 import { useRef, useState } from 'react';
 import { useAnnotator } from '@annotorious/react';
 import useAnnotatorEvents from './useAnnotatorEvents';
@@ -8,58 +10,44 @@ export default function useViewerLogic() {
   const annotator = useAnnotator();
 
   const [annotations, setAnnotations] = useState([]);
-  const [pendingAnnotation, setPendingAnnotation] = useState(null);
-  const [selectedAnnotation, setSelectedAnnotation] = useState(null); // ekledim
-  const [comment, setComment] = useState('');
-  const [tag, setTag] = useState('');
+  const [selectedAnnotation, setSelectedAnnotation] = useState(null);
+  const [isDrawingEnabled, setIsDrawingEnabled] = useState(false);
 
   useAnnotatorEvents(annotator, {
     onCreate: (anno) => {
-      setPendingAnnotation(anno);
-      setComment('');
-      setTag('');
-    },
-    onSelect: (anno) => { 
+      // Burada yeni oluşturulan anotasyonu işleyebilirsin
       setSelectedAnnotation(anno);
-    }
+    },
+    // İstersen onSelect vs. ekleyebilirsin
   });
 
   const handleCancel = () => {
-    setPendingAnnotation(null);
-    setSelectedAnnotation(null);  
-    setComment('');
-    setTag('');
+    setSelectedAnnotation(null);
   };
 
-  const handleSave = () => {
-    if (!pendingAnnotation) return;
-
-    const newAnno = {
-      ...pendingAnnotation,
-      body: [
-        { type: 'TextualBody', purpose: 'commenting', value: comment },
-        { type: 'TextualBody', purpose: 'tagging', value: tag }
-      ]
-    };
-
-    setAnnotations(prev => [...prev, newAnno]);
-    handleCancel();
+  // onCreateBody fonksiyonu, AnnotationPopup'tan gelen body objelerini ekler
+  const onCreateBody = (body) => {
+    setAnnotations((prev) => [...prev, body]);
   };
+
+  // Kaydetme işlemi AnnotationPopup içinde yapılacak, logic'te direkt değil
+  // Ama istersen handleSave fonksiyonunu da burada tutabilirsin.
 
   return {
     annoRef,
     viewerRef,
     annotations,
-    pendingAnnotation,
-    selectedAnnotation, // ekledim
-    comment,
-    tag,
-    setComment,
-    setTag,
-    handleSave,
-    handleCancel
+    selectedAnnotation,
+    setSelectedAnnotation,
+    handleCancel,
+    onCreateBody,
+    isDrawingEnabled,
+    setIsDrawingEnabled
   };
 }
+
+
+
 
 
 

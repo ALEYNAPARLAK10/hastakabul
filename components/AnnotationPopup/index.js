@@ -1,8 +1,35 @@
-import React from 'react';
+'use client';
 
-export default function AnnotationPopup({ comment, tag, setComment, setTag, onSave, onCancel }) {
+import React, { useState } from 'react';
+
+export default function AnnotationPopup({ annotation, onCancel, onCreateBody, onAnnotationSubmit }) {
+  const [comment, setComment] = useState('');
+  const [tag, setTag] = useState('');
+
   const inputClass = "w-full p-2 border rounded mb-2";
   const buttonClass = "text-sm px-2 py-1 rounded";
+
+  function onSave() {
+    console.log("Kaydet");
+
+    const bodies = [
+      { type: 'TextualBody', purpose: 'commenting', value: comment },
+      { type: 'TextualBody', purpose: 'tagging', value: tag }
+    ];
+
+    // Tüm body'leri gönderiyoruz
+    bodies.forEach((body) => {
+      onCreateBody({
+        ...body,
+        annotation: annotation?.id
+      });
+    });
+
+   
+   // if (onAnnotationSubmit) {
+  //    onAnnotationSubmit();
+ //   }
+  }
 
   return (
     <div className="absolute top-10 left-10 z-50 bg-white text-black p-4 rounded shadow-lg w-72">
@@ -13,7 +40,7 @@ export default function AnnotationPopup({ comment, tag, setComment, setTag, onSa
         className={inputClass}
       />
       <input
-        placeholder="Etiket Ekle..."
+        placeholder="Etiket ekle..."
         value={tag}
         onChange={(e) => setTag(e.target.value)}
         className={inputClass}
@@ -29,3 +56,4 @@ export default function AnnotationPopup({ comment, tag, setComment, setTag, onSa
     </div>
   );
 }
+

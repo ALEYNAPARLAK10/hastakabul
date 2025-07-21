@@ -12,6 +12,7 @@
     "@annotorious/core": "^3.5.1",
     "@annotorious/openseadragon": "^3.5.1",
     "@annotorious/react": "^3.6.2",
+    "@heroicons/react": "^2.2.0",
     "@panzoom/panzoom": "^4.6.0",
     "@recogito/annotorious": "^2.7.13",
     "annotorious": "^0.6.4",

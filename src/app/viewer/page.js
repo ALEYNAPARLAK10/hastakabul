@@ -4,6 +4,7 @@ import React from 'react';
 import dynamic from 'next/dynamic';
 import Sidebar from '../../../components/Sidebar';
 import AnnotationPopup from '../../../components/AnnotationPopup';
+import DrawToggleButton from '../../../components/DrawToggleButton';
 import SelectedAnnotationPopup from '../../../components/SelectedAnnotationPopup';
 import useViewerLogic from '../../../hooks/useViewerLogic';
 import { OpenSeadragonAnnotationPopup } from '@annotorious/react';
@@ -37,14 +38,15 @@ export default function ViewerPage() {
     annoRef,
     viewerRef,
     annotations,
-    pendingAnnotation,
-    selectedAnnotation,
-    comment,
-    tag,
-    setComment,
-    setTag,
+   // pendingAnnotation,
+  //  selectedAnnotation,
+    
     handleSave,
-    handleCancel
+    handleCancel,
+     onCreateBody,
+   // setSelectedAnnotation,
+    isDrawingEnabled,
+    setIsDrawingEnabled
   } = useViewerLogic();
 
   return (
@@ -52,9 +54,15 @@ export default function ViewerPage() {
       <Sidebar minimal annotations={annotations} />
 
       <main className="flex-1 relative h-screen overflow-hidden">
+        
+        <DrawToggleButton
+          isDrawing={isDrawingEnabled}
+          onToggle={() => setIsDrawingEnabled(prev => !prev)}
+        />
+
         <OpenSeadragonAnnotator
           ref={annoRef}
-          drawingEnabled
+          drawingEnabled={isDrawingEnabled}
           drawingMode="click"
           tool="rectangle"
           style={STYLE}
@@ -64,30 +72,34 @@ export default function ViewerPage() {
             className="h-screen w-full"
             options={OSD_OPTS}
           />
-        </OpenSeadragonAnnotator>
 
-      
-        {pendingAnnotation && (
-          <AnnotationPopup
-            comment={comment}
-            tag={tag}
-            setComment={setComment}
-            setTag={setTag}
+          
+            <OpenSeadragonAnnotationPopup
+            popup={(props) => (
+                 <AnnotationPopup
+                 {...props}
+                   onCreateBody={onCreateBody}  
             onCancel={handleCancel}
             onSave={handleSave}
           />
-        )}
-        {selectedAnnotation && !pendingAnnotation && (
-       <OpenSeadragonAnnotationPopup
-          popup={(props) => <SelectedAnnotationPopup 
-            {...props} />}
-        />
-         
-        )}
+            )}
+          />
+        </OpenSeadragonAnnotator>
+
+      
+      {/* <SelectedAnnotationPopup
+                {...props}
+                annotation={selectedAnnotation}
+                onClose={() => setSelectedAnnotation(null)}
+              />
+        */}
+        
+        
       </main>
     </div>
   );
-}
+} 
+
 
 
 
