@@ -10,25 +10,26 @@ export default function AnnotationPopup({ annotation, onCancel, onCreateBody, on
   const buttonClass = "text-sm px-2 py-1 rounded";
 
   function onSave() {
-    console.log("Kaydet");
+    if (!annotation?.id) {
+  //    alert("Anotasyon ID'si eksik!");
+    //  return;
+    }
 
     const bodies = [
       { type: 'TextualBody', purpose: 'commenting', value: comment },
       { type: 'TextualBody', purpose: 'tagging', value: tag }
     ];
 
-    // Tüm body'leri gönderiyoruz
     bodies.forEach((body) => {
       onCreateBody({
         ...body,
-        annotation: annotation?.id
+        annotation: annotation.id
       });
     });
 
-   
-   // if (onAnnotationSubmit) {
-  //    onAnnotationSubmit();
- //   }
+    if (onAnnotationSubmit) {
+      onAnnotationSubmit();
+    }
   }
 
   return (
@@ -56,4 +57,11 @@ export default function AnnotationPopup({ annotation, onCancel, onCreateBody, on
     </div>
   );
 }
+
+
+
+
+
+
+
 

@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect } from 'react';
 
 export default function useAnnotatorEvents(annotator, handlers = {}) {
@@ -8,6 +10,9 @@ export default function useAnnotatorEvents(annotator, handlers = {}) {
       createAnnotation: handlers.onCreate,
       deleteAnnotation: handlers.onDelete,
       updateAnnotation: handlers.onUpdate,
+      selectAnnotation: handlers.onSelect,
+     // mouseEnterAnnotation: handlers.onMouseOverAnnotation,
+      //mouseLeaveAnnotation: handlers.onMouseOutAnnotation
     };
 
     for (const [event, handler] of Object.entries(events)) {
@@ -19,5 +24,17 @@ export default function useAnnotatorEvents(annotator, handlers = {}) {
         if (handler) annotator.off(event, handler);
       }
     };
-  }, [annotator, handlers.onCreate, handlers.onDelete, handlers.onUpdate]);
+  }, [
+    annotator,
+    handlers.onCreate,
+    handlers.onDelete,
+    handlers.onUpdate,
+    handlers.onSelect,
+   // handlers.onMouseOverAnnotation,
+    //handlers.onMouseOutAnnotation
+  ]);
 }
+
+
+
+
